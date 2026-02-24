@@ -24,6 +24,7 @@ namespace Football_League
             league.AddTeam(new Team("Локомотив", 33, 15));
             league.AddTeam(new Team("Динамо", 41, 21));
 
+
             List<Team> expected = new List<Team>();
             expected.Add(new Team("Зенит", 65, 40));
             expected.Add(new Team("Краснодар", 60, 36));
