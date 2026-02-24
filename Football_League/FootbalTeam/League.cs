@@ -45,9 +45,9 @@ namespace FootbalTeam
             return result;
         }
 
-        public List<Team> AddTeam(string name, int score, int goals)
+        public List<Team> AddTeam(Team team)
         {
-            teams.Add(new Team(name, score, goals));
+            teams.Add(team);
             return teams;
         }
     }
