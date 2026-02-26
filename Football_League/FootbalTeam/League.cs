@@ -34,6 +34,8 @@ namespace FootbalTeam
                         copyTeam[i] = copyTeam[j];
                         copyTeam[j] = team;
                     }
+
+                   
                 }
             }
 
