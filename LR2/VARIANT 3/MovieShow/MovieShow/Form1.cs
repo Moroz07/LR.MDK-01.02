@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MovieLibrary;
-using MovieLibrary.Models;
+using MovieLib;
+
+
 
 
 namespace MovieShow
@@ -16,19 +17,17 @@ namespace MovieShow
     public partial class MainForm : Form
     {
         List<Movie> allMovies = new List<Movie>();
-        int totalShowsAction = 0; 
-        int totalShowsFantasy = 0;
+        
         public MainForm()
         {
             InitializeComponent();
-      
-            ListBoxGenre.Items.Add("Боевик");
-            ListBoxGenre.Items.Add("Фэнтези");
+
 
             totalShowsMovie.Minimum = 1;
 
             IMovie movieLoader = new StorageMovie();
             allMovies = movieLoader.LoadAllMovie();
+            LoadGenresFromMovies();
             UpdatePriceInfo();
 
         }
@@ -130,6 +129,30 @@ namespace MovieShow
                 RichTextBoxInfo.Text =
                     $"Фильм: {selectedMovie.Name}\n" +
                     $"Цена показа: {selectedMovie.Price} руб/показ\n";
+            }
+        }
+
+        private void LoadGenresFromMovies()
+        {
+            
+            ListBoxGenre.Items.Clear();
+            List<string> Genres = new List<string>();
+            foreach (Movie movie in allMovies)
+            {
+                if (!Genres.Contains(movie.Genre))
+                {
+                    Genres.Add(movie.Genre);
+                }
+            }
+
+            foreach (string genre in Genres)
+            {
+                ListBoxGenre.Items.Add(genre);
+            }
+
+            if (ListBoxGenre.Items.Count > 0)
+            {
+                ListBoxGenre.SelectedIndex = 0;
             }
         }
 

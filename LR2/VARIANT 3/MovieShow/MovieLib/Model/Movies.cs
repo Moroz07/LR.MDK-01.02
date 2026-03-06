@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace MovieLib
 {
-    internal class Movies
-    {
-        class Movie
+        public class Movie
         {
             private string name_;
             private int price_;
@@ -56,4 +54,4 @@ namespace MovieLib
         }
 
     }
-}
+

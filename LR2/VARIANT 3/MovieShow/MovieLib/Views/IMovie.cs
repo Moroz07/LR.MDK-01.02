@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MovieLib
 {
-    internal interface IMovie
+    public interface IMovie
     {
-        List<Movies> LoadAllMovie();
+        List<Movie> LoadAllMovie();
     }
 }
 

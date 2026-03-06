@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MovieLib
 {
-    internal class StorageMovie : IMovie
+    public class StorageMovie : IMovie
     {
-        public List<Movies> LoadAllMovie()
+        public List<Movie> LoadAllMovie()
         {
-            List<Movies> allMovie = new List<Movies>();
+            List<Movie> allMovie = new List<Movie>();
             string path = "data.csv";
             StreamReader info = new StreamReader(path);
             string line;
