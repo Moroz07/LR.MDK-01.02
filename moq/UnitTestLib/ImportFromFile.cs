@@ -24,6 +24,13 @@ namespace UnitTestLib
 
             foreach (User user in users)
             {
+                if (user.Login == null || 
+                    user.Password == null || 
+                    user.Name == null || 
+                     user.LastName == null )
+                {
+                    continue;
+                }
                 if (user.Login.Contains (" ") ||
                     user.Password.Contains(" ") ||
                     user.Name.Contains(" ") || 

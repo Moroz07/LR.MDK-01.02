@@ -50,5 +50,58 @@ namespace UnitTest
             repoMock.Verify(repo => repo.Add(It.IsAny<User>()), Times.Never); // ничего не добавлено
         }
 
+        [TestMethod]
+        public void TestImport_NoUsers() // файл вернул пустой список -> ImportUser вернёт true
+        {
+            List<User> users = new List<User>();
+
+            var fileMock = new Mock<IUserFile>();
+            fileMock.Setup(files => files.ReadAllLines("users.txt")).Returns(users);
+            var repoMock = new Mock<IUsersRepositoriy>();
+            IUserFile file = fileMock.Object;
+            IUsersRepositoriy repository = repoMock.Object;
+            ImportFromFile importer = new ImportFromFile(file, repository);
+            bool Flag = importer.ImportUser("users.txt");
+            Assert.IsTrue(Flag);
+        }
+
+        [TestMethod]
+        public void TestImport_UserAlreadyExistsInDB() // логин из файла уже есть в БД -> пропущен
+        {
+            List<User> users = new List<User>
+            {
+                new User { Login = "login123", Password = "123", Name = "Ivan", LastName = "Ivanov" }
+            };
+
+            var fileMock = new Mock<IUserFile>();
+            fileMock.Setup(files => files.ReadAllLines("users.txt")).Returns(users);
+            var repoMock = new Mock<IUsersRepositoriy>();
+            repoMock.Setup(repo => repo.GetUser("login123")).Returns(new User { Login = "login123", Password = "123" });
+            IUserFile file = fileMock.Object;
+            IUsersRepositoriy repository = repoMock.Object;
+            ImportFromFile importer = new ImportFromFile(file, repository);
+            bool Flag = importer.ImportUser("users.txt");
+            Assert.IsTrue(Flag);
+        }
+
+        [TestMethod]
+        public void TestImport_NoPassword() // у пользователя нет пароля -> пропущен
+        {
+            List<User> users = new List<User>
+            {
+                new User { Login = "login123", Password = null, Name = "Ivan", LastName = "Ivanov" }
+            };
+
+            var fileMock = new Mock<IUserFile>();
+            fileMock.Setup(files => files.ReadAllLines("users.txt")).Returns(users);
+            var repoMock = new Mock<IUsersRepositoriy>();
+            repoMock.Setup(repo => repo.GetUser("login123")).Returns((User)null);
+            IUserFile file = fileMock.Object;
+            IUsersRepositoriy repository = repoMock.Object;
+            ImportFromFile importer = new ImportFromFile(file, repository);
+            bool Flag = importer.ImportUser("users.txt");
+            Assert.IsTrue(Flag);
+        }
+
     }
 }
