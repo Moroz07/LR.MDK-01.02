@@ -11,12 +11,13 @@ namespace UnitTestLib
     {
         IUserFile UserFile_;
         IUsersRepositoriy repository_;
+        private int MinPasswordLength = 5;
         public ImportFromFile(IUserFile file, IUsersRepositoriy repository)
         {
             UserFile_ = file;
             repository_ = repository;
         }
-        public bool ImportUser (string filePath)
+        public bool ImportUser(string filePath)
         {
             List<User> users = UserFile_.ReadAllLines(filePath);
 
@@ -24,32 +25,54 @@ namespace UnitTestLib
 
             foreach (User user in users)
             {
-                if (user.Login == null || 
-                    user.Password == null || 
-                    user.Name == null || 
-                     user.LastName == null )
+                if (user.Login == null ||
+                    user.Password == null ||
+                    user.Name == null ||
+                    user.LastName == null)
                 {
                     continue;
                 }
-                if (user.Login.Contains (" ") ||
+
+                if (user.Login.Contains(" ") ||
                     user.Password.Contains(" ") ||
-                    user.Name.Contains(" ") || 
+                    user.Name.Contains(" ") ||
                     user.LastName.Contains(" "))
                 {
                     continue;
                 }
 
+                if (user.Password.Length < MinPasswordLength)
+                {
+                    continue;
+                }
+
+
+                bool ItsNumber = false;
+                foreach (int c in user.Password)
+                {
+                    if (c >= '0' && c <= '9')
+                    {
+                        ItsNumber = true;
+                    }
+                }
+
+                if (ItsNumber == false)
+                {
+                    continue;
+                }
+
+               
                 if (repository_.GetUser(user.Login) != null)
                 {
                     continue;
                 }
 
                 result.Add(user);
-                
             }
-            foreach (User user in result)
+
+            if (result.Count > 0)
             {
-                repository_.Add(user);
+                repository_.AddAllUsers(result);
             }
 
             return true;
