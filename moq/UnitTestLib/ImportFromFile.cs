@@ -1,5 +1,4 @@
-﻿using Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,14 +11,18 @@ namespace UnitTestLib
         IUserFile UserFile_;
         IUsersRepositoriy repository_;
         private int MinPasswordLength = 5;
+
         public ImportFromFile(IUserFile file, IUsersRepositoriy repository)
         {
             UserFile_ = file;
             repository_ = repository;
         }
+
         public bool ImportUser(string filePath)
         {
             List<User> users = UserFile_.ReadAllLines(filePath);
+
+            List<User> allUsers = repository_.LoadUserInfo();
 
             List<User> result = new List<User>();
 
@@ -46,7 +49,6 @@ namespace UnitTestLib
                     continue;
                 }
 
-
                 bool ItsNumber = false;
                 foreach (int c in user.Password)
                 {
@@ -61,8 +63,16 @@ namespace UnitTestLib
                     continue;
                 }
 
-               
-                if (repository_.GetUser(user.Login) != null)
+                bool LoginExists = false;
+                foreach (User u in allUsers)
+                {
+                    if (u.Login == user.Login)
+                    {
+                        LoginExists = true;
+                    }
+                }
+
+                if (LoginExists == true)
                 {
                     continue;
                 }
