@@ -18,7 +18,7 @@ namespace UnitTestLib
             repository_ = repository;
         }
 
-        public bool ImportUser(string filePath)
+        public List<User> ImportUser(string filePath)
         {
             List<User> users = UserFile_.ReadAllLines(filePath);
 
@@ -85,7 +85,7 @@ namespace UnitTestLib
                 repository_.AddAllUsers(result);
             }
 
-            return true;
+            return result;
         }
     }
 }
