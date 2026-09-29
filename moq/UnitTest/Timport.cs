@@ -60,6 +60,7 @@ namespace UnitTest
             {
                 Assert.AreEqual(ExpectedUsers[i].Login, added[i].Login);
                 Assert.AreEqual(ExpectedUsers[i].Password, added[i].Password);
+
             }
         }
 
